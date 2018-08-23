@@ -1,11 +1,11 @@
 # WorkSiteSafety
 Amazon Sagemaker notebook, image files, Lambda function for performing inference on DeepLens
 
-##Overview
+## Overview
 This project is aimed to demonstrate the art of the possible for worksite safety.
 Given what has been produced as a learning activity for one person with a couple of thousand images, imagine what is possible for a dedicated team!
 
-##Algorithm
+## Algorithm
 The algorithm chosen in this iteration of the project is the Amazon SageMaker built in Image Classification algorithm. This algorithm will look at an entire image and classify it as one of the following classifications:<br/>
 * "Compliant" - The main subject in the image is wearing their hardhat and is hence compliant with that aspect of worksite safety.<br/>
 * "Not compliant" - The main subject in the image is not wearing their hardhat and is hence not compliant with that aspect of worksite safety.<br/>
@@ -14,13 +14,13 @@ The algorithm chosen in this iteration of the project is the Amazon SageMaker bu
 
 A suggested future piece of work is to look at the new Amazon SageMaker built-in Object Detection algorithm. This would likely produce even better results for subjects standing a variable distance from the camera as well as for images with multiple subjects in view. The data preparation would however require a lot more effort.
 
-##Training Data description
+## Training Data description
 The training data used with this model was a set of images of an individual in near full-frame from their head down to around their thighs/knees. Some sample images have been provided in this repo; however, for privacy reasons no photos showing faces have been provided. Photos were taken on an iPhone with the camera held at eye-level. Subjects were asked to turn to each 45 degree point on the compass as well as look left and right at many of these compass points.
 Photos were taken with the subject wearing the hard hat as well as a complimentary set of photos without the hardhat or with the hardhat held in front of them or under their arm.
 
 A real world scenario should pay careful attention to the location of the camera (will it be mounted overhead?) in order to gather images taken at the appropriate angle
 
-##Creating training files
+## Creating training files
 Photos were organized into the following directory structure
 
 images<br/>
@@ -51,21 +51,21 @@ wc -l dataset_train.lst
 Once complete, run the following command to create the recordio files which will be used as input for training our model:<br/>
 python im2rec.py --resize 224 dataset images
 
-##Upload training files to S3 for consumption by SageMaker
+## Upload training files to S3 for consumption by SageMaker
 Create a S3 bucket in the us-east-1 (North Virginia). The reason is that DeepLens deployments are performed from this region so it is easiest to avoid having to transfer models between regions.
 
 Copy the training and validation recordio files into separate directories in your S3 bucket:<br/>
 aws s3 cp dataset\_train.rec s3://\<S3 bucket name>/train/<br/>
 aws s3 cp dataset\_val.rec s3://\<S3 bucket name>/validation/<br/>
 
-##Upload test files to S3 for testing inference in SageMaker notebook
+## Upload test files to S3 for testing inference in SageMaker notebook
 It can be useful to have access to some test images in jpeg format that are already resized to the dimensions expected by your trained model. This will allow you to perform some preliminary testing of your trained model within your notebook before deploying the model to a DeepLens device
 
 Store a handful of test images in a directory on your local machine (in this example the S3 directory is called test).<br/>
 Copy the images to a directory in your S3 bucket:<br/>
 aws s3 cp images\_test/ s3://\<S3 bucket name>/test/ --recursive
 
-##Train your model
+## Train your model
 Using Amazon SageMaker in us-east-1 region, create a notebook instance
 
 Upload the notebook provided in this distribution "deeplens-worksite-safety-public.ipynb"
@@ -82,7 +82,7 @@ Execute notebook cells down to but not including the section "Inference"<br/>
 You now have a trained model!
 You could now jump straight to deploying to your DeepLens device; however, the next step runs through some local tests using SageMaker to ensure the model is performing correctly
 
-##Test model inference using SageMaker notebook
+## Test model inference using SageMaker notebook
 Find the line 'model_name="deeplens-WorkSiteSafety"' and give it a unique model name
 
 Execute notebook cells down to but not including the section "Download test images"<br/>
@@ -95,20 +95,20 @@ Find the line 'file\_name = "/tmp/test/sample\_image1.jpg"' and change the image
 
 Execute the cell. Was the result correct? Was the probability nice and high?
 
-##Delete the SageMaker hosted endpoint
+## Delete the SageMaker hosted endpoint
 Execute the final cell to delete (and stop paying for) the SageMaker hosting endpoint
 
-#Deploy to your DeepLens
-##Register your DeepLens device to your AWS account and ensure that the device status is Online
+# Deploy to your DeepLens
+## Register your DeepLens device to your AWS account and ensure that the device status is Online
 https://docs.aws.amazon.com/deeplens/latest/dg/deeplens-getting-started-register.html
 
 
-##Import your model
+## Import your model
 There are two options provided here:<br/>
 1) Import your own model built using SageMaker<br/>
 2) Import the sample pre-built model provided in this repository<br/>
 
-###Option 1. Import your own model from SageMaker
+### Option 1. Import your own model from SageMaker
 From the DeepLens console, select 'Models'<br/>
 Select 'Import Model'<br/>
 From 'Import Source', ensure 'Amazon SageMaker trained model' is selected<br/>
@@ -117,7 +117,7 @@ From 'Model settings', select the following options:<br/>
 * Model Name: Select a name that is meaningful to you
 * Model Framework: MXNet
 
-###Option 2. Import the sample pre-built model provided in this repository
+### Option 2. Import the sample pre-built model provided in this repository
 From the DeepLens console, select 'Models'<br/>
 Select 'Import Model'<br/>
 From 'Import Source', select 'Externally Trained Model'<br/>
@@ -128,7 +128,7 @@ From 'Model settings', select the following options:<br/>
 * Model Name: Select a name that is meaningful to you
 * Model Framework: MXNet
 
-##Create the Lambda function which will run on the DeepLens device to perform inference
+## Create the Lambda function which will run on the DeepLens device to perform inference
 Follow the instructions provided at: https://docs.aws.amazon.com/deeplens/latest/dg/deeplens-inference-lambda-create.html and create a function called "deeplens-hardhat-detection"<br/>
 * Replace all code with the code provided in the file "greengrassHHdetect.py"<br/>
 * In your Lambda environment, change the name of your python function to "greengrassHHdetect.py"<br/>
@@ -137,7 +137,7 @@ Follow the instructions provided at: https://docs.aws.amazon.com/deeplens/latest
 Save your function
 Publish your function "Actions - Publish new version"
 
-##Create a DeepLens project
+## Create a DeepLens project
 From the DeepLens console, select 'Projects'<br/>
 Select 'Create new project'<br/>
 From 'Project type', select 'Create a new blank project'<br/>
@@ -148,7 +148,7 @@ From 'Project Content', select the following options:<br/>
 * Add function: Select the Lambda function (at the required version) you published
 Select 'Create' to create the project
 
-##Deploy the project to your DeepLens device
+## Deploy the project to your DeepLens device
 From the DeepLens console, select 'Projects'<br/>
 Select the radio button next to your project<br/>
 Select 'Deploy to device'<br/>
@@ -156,10 +156,10 @@ Select the radio button next to your desired DeepLens device<br/>
 Select 'Review'<br/>
 When ready to deploy, select 'Deploy'<br/>
 
-#Viewing project output
+# Viewing project output
 I found it very helpful to purchase a micro-HDMI to HDMI cable so that I could directly display the DeepLens output on a screen. Note that a USB keyboard and mouse will also be necessary if you wish to do this.<br/>
-##There are two options to view the DeepLens project output:
-###Option 1: View project stream on your DeepLens Device
+## There are two options to view the DeepLens project output:
+### Option 1: View project stream on your DeepLens Device
 https://docs.aws.amazon.com/deeplens/latest/dg/deeplens-viewing-device-output-on-device.html#deeplens-viewing-output-project-stream
-###Option 2: View Your AWS DeepLens Project Output in a Browser
+### Option 2: View Your AWS DeepLens Project Output in a Browser
 https://docs.aws.amazon.com/deeplens/latest/dg/deeplens-viewing-device-output-in-browser.html
