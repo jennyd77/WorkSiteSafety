@@ -2,7 +2,7 @@
 Amazon Sagemaker notebook, image files, Lambda function for performing inference on DeepLens
 
 ## Overview
-This project is aimed to demonstrate the art of the possible for worksite safety.
+This project is aimed to demonstrate the art of the possible for worksite safety.<br/>
 Given what has been produced as a learning activity for one person with a couple of thousand images, imagine what is possible for a dedicated team!
 
 ## Algorithm
@@ -15,8 +15,8 @@ The algorithm chosen in this iteration of the project is the Amazon SageMaker bu
 A suggested future piece of work is to look at the new Amazon SageMaker built-in Object Detection algorithm. This would likely produce even better results for subjects standing a variable distance from the camera as well as for images with multiple subjects in view. The data preparation would however require a lot more effort.
 
 ## Training Data description
-The training data used with this model was a set of images of an individual in near full-frame from their head down to around their thighs/knees. Some sample images have been provided in this repo; however, for privacy reasons no photos showing faces have been provided. Photos were taken on an iPhone with the camera held at eye-level. Subjects were asked to turn to each 45 degree point on the compass as well as look left and right at many of these compass points.
-Photos were taken with the subject wearing the hard hat as well as a complimentary set of photos without the hardhat or with the hardhat held in front of them or under their arm.
+The training data used with this model was a set of images of an individual in near full-frame from their head down to around their thighs/knees. Some sample images have been provided in this repo; however, for privacy reasons no photos showing faces have been provided. Photos were taken on an iPhone with the camera held at eye-level. Subjects were asked to turn to each 45 degree point on the compass as well as look left and right at many of these compass points.<br/>
+Photos were taken with the subject wearing the hard hat as well as a complimentary set of photos without the hardhat, with a baseball cap, or with the hardhat held in front of them or under their arm.
 
 A real world scenario should pay careful attention to the location of the camera (will it be mounted overhead?) in order to gather images taken at the appropriate angle
 
@@ -79,7 +79,7 @@ Find the line 'job_name_prefix = "deeplens-worksite-safety-224-50-CCT"'. Change 
 
 Execute notebook cells down to but not including the section "Inference"<br/>
 
-You now have a trained model!
+You now have a trained model!<br/>
 You could now jump straight to deploying to your DeepLens device; however, the next step runs through some local tests using SageMaker to ensure the model is performing correctly
 
 ## Test model inference using SageMaker notebook
@@ -114,7 +114,7 @@ Select 'Import Model'<br/>
 From 'Import Source', ensure 'Amazon SageMaker trained model' is selected<br/>
 From 'Model settings', select the following options:<br/>
 * Amazon SageMaker training job ID: Choose the TRAINING JOB ID that produced your model (this will likely be the most recent training job)<br/>
-* Model Name: Select a name that is meaningful to you
+* Model Name: Select a name that is meaningful to you <br/>
 * Model Framework: MXNet
 
 ### Option 2. Import the sample pre-built model provided in this repository
@@ -125,7 +125,7 @@ From 'Model settings', select the following options:<br/>
 * Model artifact path: Select the S3 bucket path to the location of the model artifacts<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;Note1: The pathname must start with S3://deeplens)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;Note2: In this case the artifact will be model.tar.gz<br/>
-* Model Name: Select a name that is meaningful to you
+* Model Name: Select a name that is meaningful to you<br/>
 * Model Framework: MXNet
 
 ## Create the Lambda function which will run on the DeepLens device to perform inference
@@ -134,7 +134,7 @@ Follow the instructions provided at: https://docs.aws.amazon.com/deeplens/latest
 * In your Lambda environment, change the name of your python function to "greengrassHHdetect.py"<br/>
 * Ensure that the Lambda function handler is specified as "greengrassHHdetect.function_handler"<br/>
 
-Save your function
+Save your function<br/>
 Publish your function "Actions - Publish new version"
 
 ## Create a DeepLens project
@@ -144,8 +144,8 @@ From 'Project type', select 'Create a new blank project'<br/>
 Select 'Next'<br/>
 Within 'Project Information', select a Project Name that is meaningful to you<br/>
 From 'Project Content', select the following options:<br/>
-* Add model: Select the model you imported
-* Add function: Select the Lambda function (at the required version) you published
+* Add model: Select the model you imported<br/>
+* Add function: Select the Lambda function (at the required version) you published<br/>
 Select 'Create' to create the project
 
 ## Deploy the project to your DeepLens device
