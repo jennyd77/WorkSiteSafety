@@ -1,5 +1,12 @@
 # WorkSiteSafety
 Amazon Sagemaker notebook, image files, Lambda function for performing inference on DeepLens
+The running model will identify the primary subject in view and determine whether they are compliant with WorkSite Safety standards for wearing a hardhat.
+
+## Known Limitations
+This model has only been trained with a clean, white hardhat. It will not currently produce reliable results for different coloured hardhats or for hardhats covered with stickers.<br/>
+Currently I see this as a useful talking point about the need for training data that adequately represents the real-world use case.
+
+The model has been trained at subject eye-level. A real-world deployment should consider the position of the camera (e.g. elevation) and ensure training images are captured at the correct angle
 
 ## Overview
 This project is aimed to demonstrate the art of the possible for worksite safety.<br/>
