@@ -137,6 +137,8 @@ From 'Model settings', select the following options:<br/>
 
 ## Create the Lambda function which will run on the DeepLens device to perform inference
 Follow the instructions provided at: https://docs.aws.amazon.com/deeplens/latest/dg/deeplens-inference-lambda-create.html and create a function called "deeplens-hardhat-detection"<br/>
+Note: ensure you copy the greengrass-hello-world blueprint as this includes libraries that are required
+
 * Replace all code with the code provided in the file "greengrassHHdetect.py"<br/>
 * In your Lambda environment, change the name of your python function to "greengrassHHdetect.py"<br/>
 * Ensure that the Lambda function handler is specified as "greengrassHHdetect.function_handler"<br/>
