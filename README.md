@@ -43,7 +43,6 @@ images<br/>
 
 Next I used opencv to double my dataset by creating a mirror (vertical flip) of every image.<br/>
 The python3 code used to perform this augmentation is provided as augment_images.py.<br/>
-Once complete, the training dataset consists of 5308 images
 
 SageMaker's Image Classification algorithm has a preferred record type of recordio.
 
@@ -52,8 +51,9 @@ Download im2rec.py from [this github repo](https://github.com/apache/incubator-m
 Run the following command to create .lst (list) and .idx (index) files for the dataset:<br/>
 python im2rec.py --list --recursive --train-ratio 0.95 dataset images
 
-Note: If you want to check how many images are in your dataset, use the following command:<br/>
-wc -l dataset_train.lst
+Note: If you want to check how many images are in your dataset, use one of the following commands:<br/>
+Linux/MAC: wc -l dataset\_train.lst<br>
+Windows: findstr "." dataset\_train.lst | find /c/v ""<br>
 
 Once complete, run the following command to create the recordio files which will be used as input for training our model:<br/>
 python im2rec.py --resize 224 dataset images
@@ -73,16 +73,19 @@ Copy the images to a directory in your S3 bucket:<br/>
 aws s3 cp images\_test/ s3://\<S3 bucket name>/test/ --recursive
 
 ## Train your model
-Using Amazon SageMaker in us-east-1 region, create a notebook instance
+Using Amazon SageMaker in us-east-1 (North Virginia) region, create a notebook instance
 
 Upload the notebook provided in this distribution "deeplens-worksite-safety-public.ipynb"
 
-Find the line 'bucket="deeplens-worksite-safety"' and change the bucket to match your bucket name<br/>
+Find the line 'bucket_path="deeplens-your-bucketpath-name"' and change to match your bucket name and optionally a path in the bucket<br/>
+**Note:** Your bucket name must start with the word 'deeplens' in order to allow the DeepLens IAM role to access your model.
 Find the line 'num_layers = 50'. This is a hyperparameter you need to try different options for. You will need many images to take advantage of greater layers.<br/>
 Find the line 'image_shape = "3,224,224"'. If you have changed the dimension of the images from 3 channels (RGB) with a maximum of 224x224, you will need to adjust this line<br/>
 Find the line 'num_training_samples = 5308'. This must match the number of images in your training set<br/>
 Find the line 'num_classes = 4'. This must match the number of output classifications<br/>
-Find the line 'job_name_prefix = "deeplens-worksite-safety-224-50-CCT"'. Change this name if you want to<br/>
+Find the line 'job_name_prefix = "your-jobname-prefix"'. Change this name to something relevant to your project<br/>
+
+**Note:** mini_batch_size determines the number of images sent to each GPU at a time, ensure this setting is smaller than your training set.
 
 Execute notebook cells down to but not including the section "Inference"<br/>
 
@@ -90,7 +93,7 @@ You now have a trained model!<br/>
 You could now jump straight to deploying to your DeepLens device; however, the next step runs through some local tests using SageMaker to ensure the model is performing correctly
 
 ## Test model inference using SageMaker notebook
-Find the line 'model_name="deeplens-WorkSiteSafety"' and give it a unique model name
+Find the line 'model_name="your-modelname"' and give it a unique model name
 
 Execute notebook cells down to but not including the section "Download test images"<br/>
 
@@ -98,7 +101,9 @@ You now have an inference endpoint hosted by the SageMaker service!
 
 Continue to the next cell in the notebook to download test images from the S3 bucket to this notebook local directory
 
-Find the line 'file\_name = "/tmp/test/sample\_image1.jpg"' and change the image name to match the image you wish to perform inference on
+In the section "Download test images" update the bucketpath to the location of your test images
+
+In the section "Validate Model", find the line 'file\_name = "/tmp/test/sample\_image1.jpg"' and change the image name to match the image you wish to perform inference on
 
 Execute the cell. Was the result correct? Was the probability nice and high?
 
@@ -139,8 +144,8 @@ From 'Model settings', select the following options:<br/>
 Follow the instructions provided at: https://docs.aws.amazon.com/deeplens/latest/dg/deeplens-inference-lambda-create.html and create a function called "deeplens-hardhat-detection"<br/>
 Note: ensure you copy the greengrass-hello-world blueprint as this includes libraries that are required
 
-* Replace all code with the code provided in the file "greengrassHHdetect.py"<br/>
-* In your Lambda environment, change the name of your python function to "greengrassHHdetect.py"<br/>
+* Replace all code in the file "greengrassHelloWorld.py" with the code provided in the file "greengrassHHdetect.py"<br/>
+* In your Lambda environment, change the name of your python function from "greengrassHelloWorld.py" to "greengrassHHdetect.py"<br/>
 * Ensure that the Lambda function handler is specified as "greengrassHHdetect.function_handler"<br/>
 
 Save your function<br/>
@@ -172,3 +177,12 @@ I found it very helpful to purchase a micro-HDMI to HDMI cable so that I could d
 https://docs.aws.amazon.com/deeplens/latest/dg/deeplens-viewing-device-output-on-device.html#deeplens-viewing-output-project-stream
 ### Option 2: View Your AWS DeepLens Project Output in a Browser
 https://docs.aws.amazon.com/deeplens/latest/dg/deeplens-viewing-device-output-in-browser.html
+
+# Update October 2018
+I have published an alternate version of the Lambda function and model in the subfolder 'modelv2'. <br>
+I am keen to hear your feedback on whether this new release produces better results.
+The differences from v1 are:<br>
+* To avoid saturating the IOT endpoint, only every 10th inference is sent to the endpoint<br>
+* Additional images were added to cover edge cases<br>
+* Lambda function is set to infer 'unsure' if neither 'compliant' or 'not compliant' are below 50% confidence<br>
+* Color\_Crop\_Transform setting was enabled during training in order to augment the image set<br>
