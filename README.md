@@ -29,10 +29,10 @@ A real world scenario should pay careful attention to the location of the camera
 
 ## Creating training files
 Photos were first resized and then organised into the directory structure specified below. 
-To resize the photos, the resize.py program located in [this github repo](https://github.com/linda-pinda/WorkSiteSafety/blob/master/resize.py) was used. The following inputs were used:<br/>
+To resize the photos, the resize.py program located in [this github repo](https://github.com/linda-pinda/WorkSiteSafety/blob/master/resize.py) was used. The photos were resized to 1920 x 1080 to match the size of the images pulled from the deeplens, and hence have the same size images for training as for using the trained model. The following inputs were used:<br/>
 * -i \<The directory where the photos are\><br/>
-* -x \<The desired width\><br/>
-* -y \<The desired height\><br/>
+* -x \<The desired width \(we used 1920\)\><br/>
+* -y \<The desired height\(we used 1080\)\><br/>
 
 The following organisational structure was then used:<br/>
 images<br/>
