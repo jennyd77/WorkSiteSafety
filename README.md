@@ -29,13 +29,12 @@ A real world scenario should pay careful attention to the location of the camera
 
 ## Creating training files
 Photos were first resized and then organised into the directory structure specified below. 
-To resize the photos, the resize.py program located in [this github repo](https://github.com/linda-pinda/WorkSiteSafety/blob/master/resize.py) was used. The following inputs were used:
--i <The directory where the photos are>
--x <The desired width>
--y <The desired height>
+To resize the photos, the resize.py program located in [this github repo](https://github.com/linda-pinda/WorkSiteSafety/blob/master/resize.py) was used. The following inputs were used:<br/>
+* -i \<The directory where the photos are\><br/>
+* -x \<The desired width\><br/>
+* -y \<The desired height\><br/>
 
-The following organisational structure was then used:
-
+The following organisational structure was then used:<br/>
 images<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;⎿	0\_compliant<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
