@@ -29,7 +29,7 @@ A real world scenario should pay careful attention to the location of the camera
 
 ## Creating training files
 Photos were first resized and then organised into the directory structure specified below. 
-To resize the photos, the resize.py program located in [this github repo](https://github.com/apache/incubator-mxnet/blob/master/tools/resize.py) was used. The following inputs were used:
+To resize the photos, the resize.py program located in [this github repo](https://github.com/linda-pinda/WorkSiteSafety/blob/master/resize.py) was used. The following inputs were used:
 -i <The directory where the photos are>
 -x <The desired width>
 -y <The desired height>
