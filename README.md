@@ -28,7 +28,13 @@ Photos were taken with the subject wearing the hard hat as well as a complimenta
 A real world scenario should pay careful attention to the location of the camera (will it be mounted overhead?) in order to gather images taken at the appropriate angle
 
 ## Creating training files
-Photos were organized into the following directory structure
+Photos were first resized and then organised into the directory structure specified below. 
+To resize the photos, the resize.py program located in [this github repo](https://github.com/apache/incubator-mxnet/blob/master/tools/resize.py) was used. The following inputs were used:
+-i <The directory where the photos are>
+-x <The desired width>
+-y <The desired height>
+
+The following organisational structure was then used:
 
 images<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;⎿	0\_compliant<br/>
