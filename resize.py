@@ -14,7 +14,6 @@
 #!/usr/local/bin/python3
 from PIL import Image
 import os
-import glob
 import cv2
 import sys, getopt
 
